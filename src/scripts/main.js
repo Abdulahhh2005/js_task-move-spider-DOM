@@ -38,25 +38,28 @@
 // eslint-disable-next-line max-len
 // Різниця від першого варіанту в тому, що клік спрацьовує лише всередині стіни, павук тягнеться до курсору, але не виходить за рамки.
 
-document.querySelector('.wall').addEventListener('click', (e) => {
-  const spider = document.querySelector('.spider');
+document.addEventListener('click', (e) => {
   // Щоб курсор спрацьовував тілки на стіні
-  const wall = e.currentTarget;
+  const wall = e.target.closest('.wall');
 
-  // Розміри паука
-  const spiderWidth = spider.offsetWidth;
-  const spiderHeight = spider.offsetHeight;
+  if (!wall) {
+    return;
+  }
 
-  // Координати кліку всередині стіни
-  let clickX = e.offsetX - spiderWidth / 2;
-  let clickY = e.offsetY - spiderHeight / 2;
+  const spider = document.querySelector('.spider');
+  const { width: spiderW, height: spiderH } = spider;
+  const { left: wallLeft, top: wallTop } = wall.getBoundingClientRect();
 
-  // Обмеження по стіні
-  clickX = Math.max(0, Math.min(clickX, wall.clientWidth - spiderWidth));
-  clickY = Math.max(0, Math.min(clickY, wall.clientHeight - spiderHeight));
+  // Координати кліка всередині стіни, центр павука під курсором
+  let x = e.clientX - wallLeft - spiderW / 2;
+  let y = e.clientY - wallTop - spiderH / 2;
 
-  spider.style.left = clickX + 'px';
-  spider.style.top = `${clickY}px`;
+  // Обмеження руху павука всередині стіни (використовуємо clientWidth/Height)
+  x = Math.max(0, Math.min(x, wall.clientWidth - spiderW));
+  y = Math.max(0, Math.min(y, wall.clientHeight - spiderH));
+
+  spider.style.left = `${x}px`;
+  spider.style.top = y + 'px';
 });
 
 // -----------------------------------------------------------------------------
