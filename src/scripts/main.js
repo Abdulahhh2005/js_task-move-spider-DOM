@@ -39,6 +39,7 @@
 // Різниця від першого варіанту в тому, що клік спрацьовує лише всередині стіни, павук тягнеться до курсору, але не виходить за рамки.
 
 document.addEventListener('click', (e) => {
+  const spider = document.querySelector('.spider');
   // Щоб курсор спрацьовував тілки на стіні
   const wall = e.target.closest('.wall');
 
@@ -46,17 +47,16 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  const spider = document.querySelector('.spider');
-  const { width: spiderW, height: spiderH } = spider;
-  const { left: wallLeft, top: wallTop } = wall.getBoundingClientRect();
+  const spiderRect = spider.getBoundingClientRect();
+  const wallRect = wall.getBoundingClientRect();
 
   // Координати кліка всередині стіни, центр павука під курсором
-  let x = e.clientX - wallLeft - spiderW / 2;
-  let y = e.clientY - wallTop - spiderH / 2;
+  let x = e.clientX - wallRect.left - spiderRect.width / 2;
+  let y = e.clientY - wallRect.top - spiderRect.height / 2;
 
   // Обмеження руху павука всередині стіни (використовуємо clientWidth/Height)
-  x = Math.max(0, Math.min(x, wall.clientWidth - spiderW));
-  y = Math.max(0, Math.min(y, wall.clientHeight - spiderH));
+  x = Math.max(0, Math.min(x, wall.clientWidth - spiderRect.width));
+  y = Math.max(0, Math.min(y, wall.clientHeight - spiderRect.height));
 
   spider.style.left = `${x}px`;
   spider.style.top = y + 'px';
