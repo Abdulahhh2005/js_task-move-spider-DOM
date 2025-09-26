@@ -55,8 +55,8 @@ document.addEventListener('click', (e) => {
   let y = e.clientY - wallRect.top - spiderRect.height / 2;
 
   // Обмеження руху павука всередині стіни (використовуємо clientWidth/Height)
-  x = Math.max(0, Math.min(x, wall.clientWidth - spiderRect.width));
-  y = Math.max(0, Math.min(y, wall.clientHeight - spiderRect.height));
+  x = Math.max(0, Math.min(x, wallRect.width - spiderRect.width));
+  y = Math.max(0, Math.min(y, wallRect.height - spiderRect.height));
 
   spider.style.left = `${x}px`;
   spider.style.top = y + 'px';
